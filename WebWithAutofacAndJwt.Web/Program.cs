@@ -46,9 +46,14 @@ builder.Services.RegisterIdGenService();
 
 //添加数据库
 builder.Services.AddDbContext<AppDbContext>(
-        options => options.UseNpgsql("Name=ConnectionStrings:PgSqlConnection", x => x.MigrationsAssembly("WebWithAutofacAndJwt.Migrations")));
+        options => 
+        options.UseNpgsql("Name=ConnectionStrings:PgSqlConnection", x => x.MigrationsAssembly("WebWithAutofacAndJwt.Migrations"))
+    );
 //添加Identity
-builder.Services.AddIdentity<User, IdentityRole<long>>().AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddIdentity<User, IdentityRole<long>>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    //添加用于生成重置密码的令牌、更改电子邮件和更改电话号码操作以及双因素身份验证令牌生成的默认令牌提供程序。（这东西有啥用我也不清楚）
+    .AddDefaultTokenProviders();
 
 //添加jwt
 builder.Services.AddAuthentication(x =>

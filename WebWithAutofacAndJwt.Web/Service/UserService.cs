@@ -82,7 +82,9 @@ namespace WebWithAutofacAndJwt.Web.Service
                 return false;
             }
 
-            User user = new() { Id = YitIdHelper.NextId(), UserName = userName, SecurityStamp = Guid.NewGuid().ToString() };
+            //添加了AddDefaultTokenProviders后，不需要手动指定SecurityStamp（这又是为啥，哪有文档能看不）
+            //User user = new() { Id = YitIdHelper.NextId(), UserName = userName, SecurityStamp = Guid.NewGuid().ToString() };
+            User user = new() { Id = YitIdHelper.NextId(), UserName = userName };
             var res = await _userManager.CreateAsync(user, password);
             var roleRes = await _userManager.AddToRoleAsync(user, role);
             return res.Succeeded && roleRes.Succeeded;
