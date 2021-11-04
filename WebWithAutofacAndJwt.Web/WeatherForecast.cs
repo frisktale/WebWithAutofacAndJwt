@@ -1,4 +1,4 @@
-namespace WebWithAutofacAndJwt
+namespace WebWithAutofacAndJwt.Web
 {
     public class WeatherForecast
     {

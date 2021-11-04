@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using WebWithAutofacAndJwt.Infrastructure;
-using WebWithAutofacAndJwt.Model;
-using WebWithAutofacAndJwt.Service;
-using static WebWithAutofacAndJwt.Service.UserService;
+using WebWithAutofacAndJwt.Web.Infrastructure;
+using WebWithAutofacAndJwt.Web.Model;
+using WebWithAutofacAndJwt.Web.Service;
+using static WebWithAutofacAndJwt.Web.Service.UserService;
 
-namespace WebWithAutofacAndJwt.Controllers
+namespace WebWithAutofacAndJwt.Web.Controllers
 {
     [ApiController]
     [Authorize]

@@ -1,4 +1,4 @@
-﻿namespace WebWithAutofacAndJwt.Model
+﻿namespace WebWithAutofacAndJwt.Web.Model
 {
     public static class UserRoles
     {

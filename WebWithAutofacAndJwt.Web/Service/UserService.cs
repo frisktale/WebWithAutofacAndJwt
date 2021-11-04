@@ -1,8 +1,8 @@
 ﻿using Autofac.Extras.DynamicProxy;
-using WebWithAutofacAndJwt.Interceptor;
-using WebWithAutofacAndJwt.Model;
+using WebWithAutofacAndJwt.Web.Interceptor;
+using WebWithAutofacAndJwt.Web.Model;
 
-namespace WebWithAutofacAndJwt.Service
+namespace WebWithAutofacAndJwt.Web.Service
 {
     [Intercept(typeof(UserInterceptor))]
     public class UserService : IUserService

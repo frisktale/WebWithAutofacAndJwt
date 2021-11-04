@@ -2,15 +2,28 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Castle.Core.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using WebWithAutofacAndJwt;
-using WebWithAutofacAndJwt.Infrastructure;
+using WebWithAutofacAndJwt.Entity;
+using WebWithAutofacAndJwt.Web;
+using WebWithAutofacAndJwt.Web.Extensions;
+using WebWithAutofacAndJwt.Web.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.ConfigureAppConfiguration((hostContext, builder) =>
+{
+    // Add other providers for JSON, etc.
+
+    if (hostContext.HostingEnvironment.IsDevelopment())
+    {
+        builder.AddUserSecrets<Program>();
+    }
+});
 
 //配置Autofac为默认IOC容器
 builder.Host
@@ -18,13 +31,23 @@ builder.Host
     .ConfigureContainer<ContainerBuilder>(t => t.RegisterModule(new AutofacModule()));
 // Add services to the container.
 
-builder.Services.AddControllers(); 
+builder.Services.AddControllers().AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+    }
+);
 
 //获取配置
 var jwtConfig = builder.Configuration.GetSection("jwtTokenConfig");
 var jwtTokenConfig = jwtConfig.Get<JwtTokenConfig>();
 //绑定配置
 builder.Services.Configure<JwtTokenConfig>(jwtConfig);
+
+//配置id生成器
+builder.Services.RegisterIdGenService();
+
+builder.Services.AddDbContext<AppDbContext>(
+        options => options.UseNpgsql("Name=ConnectionStrings:PgSqlConnection", x => x.MigrationsAssembly("WebWithAutofacAndJwt.Migrations")));
 
 //添加jwt
 builder.Services.AddAuthentication(x =>
@@ -77,10 +100,9 @@ builder.Services.AddSwaggerGen(c =>
 //添加跨域
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
+    options.AddDefaultPolicy(
         builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 });
-
 
 var app = builder.Build();
 
@@ -91,7 +113,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebWithAutofac v1"));
 }
 
-app.UseCors("AllowAll");
+app.UseCors();
 app.UseHttpsRedirection();
 
 //此处注意顺序不能反，而且必须在mapcontroller的上面。（理解中间件的原理）

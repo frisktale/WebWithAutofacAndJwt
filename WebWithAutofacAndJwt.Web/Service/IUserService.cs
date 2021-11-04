@@ -1,4 +1,4 @@
-﻿namespace WebWithAutofacAndJwt.Service
+﻿namespace WebWithAutofacAndJwt.Web.Service
 {
     public interface IUserService
     {

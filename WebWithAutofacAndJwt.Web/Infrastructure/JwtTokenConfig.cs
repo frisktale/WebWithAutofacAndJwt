@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace WebWithAutofacAndJwt.Infrastructure
+namespace WebWithAutofacAndJwt.Web.Infrastructure
 {
     /// <summary>
     /// jwt选项

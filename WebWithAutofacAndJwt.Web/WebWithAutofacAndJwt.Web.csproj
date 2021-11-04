@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>3bc8debe-cbbf-4412-b566-c7cacb114ce6</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,7 +13,17 @@
     <PackageReference Include="Autofac.Extras.DynamicProxy" Version="6.0.0" />
     <PackageReference Include="Castle.Core" Version="4.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0-rc.2.21480.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0-rc.2.21480.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WebWithAutofacAndJwt.Entity\WebWithAutofacAndJwt.Entity.csproj" />
+    <ProjectReference Include="..\WebWithAutofacAndJwt.Migrations\WebWithAutofacAndJwt.Migrations.csproj" />
+    <ProjectReference Include="..\WebWithAutofacAndJwt.Util\WebWithAutofacAndJwt.Util.csproj" />
   </ItemGroup>
 
 </Project>

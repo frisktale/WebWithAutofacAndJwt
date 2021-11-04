@@ -1,6 +1,6 @@
 ﻿using Castle.DynamicProxy;
 
-namespace WebWithAutofacAndJwt.Interceptor;
+namespace WebWithAutofacAndJwt.Web.Interceptor;
 
 public class UserInterceptor : IInterceptor
 {

@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31717.71
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebWithAutofacAndJwt", "WebWithAutofacAndJwt\WebWithAutofacAndJwt.csproj", "{8E59C4AA-E40D-4CF7-A6BA-F0D768AF0C84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebWithAutofacAndJwt.Entity", "WebWithAutofacAndJwt.Entity\WebWithAutofacAndJwt.Entity.csproj", "{CFEA16BA-DCEA-409F-BF53-3B3DD8480FE4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebWithAutofacAndJwt.Migrations", "WebWithAutofacAndJwt.Migrations\WebWithAutofacAndJwt.Migrations.csproj", "{412734E7-9B08-422D-89BC-651EEDA24215}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebWithAutofacAndJwt.Util", "WebWithAutofacAndJwt.Util\WebWithAutofacAndJwt.Util.csproj", "{74E558E9-0720-4AB4-8523-12AC9026360E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebWithAutofacAndJwt.Web", "WebWithAutofacAndJwt.Web\WebWithAutofacAndJwt.Web.csproj", "{228F795A-4638-46B3-976B-86472FE8A305}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +17,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8E59C4AA-E40D-4CF7-A6BA-F0D768AF0C84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8E59C4AA-E40D-4CF7-A6BA-F0D768AF0C84}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8E59C4AA-E40D-4CF7-A6BA-F0D768AF0C84}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8E59C4AA-E40D-4CF7-A6BA-F0D768AF0C84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFEA16BA-DCEA-409F-BF53-3B3DD8480FE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFEA16BA-DCEA-409F-BF53-3B3DD8480FE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFEA16BA-DCEA-409F-BF53-3B3DD8480FE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFEA16BA-DCEA-409F-BF53-3B3DD8480FE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{412734E7-9B08-422D-89BC-651EEDA24215}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{412734E7-9B08-422D-89BC-651EEDA24215}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{412734E7-9B08-422D-89BC-651EEDA24215}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{412734E7-9B08-422D-89BC-651EEDA24215}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74E558E9-0720-4AB4-8523-12AC9026360E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74E558E9-0720-4AB4-8523-12AC9026360E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74E558E9-0720-4AB4-8523-12AC9026360E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74E558E9-0720-4AB4-8523-12AC9026360E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{228F795A-4638-46B3-976B-86472FE8A305}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{228F795A-4638-46B3-976B-86472FE8A305}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{228F795A-4638-46B3-976B-86472FE8A305}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{228F795A-4638-46B3-976B-86472FE8A305}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

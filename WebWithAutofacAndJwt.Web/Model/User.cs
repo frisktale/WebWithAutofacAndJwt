@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace WebWithAutofacAndJwt.Model
+namespace WebWithAutofacAndJwt.Web.Model
 {
     public class User
     {

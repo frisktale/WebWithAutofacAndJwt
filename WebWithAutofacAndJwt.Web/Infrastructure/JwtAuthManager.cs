@@ -10,7 +10,7 @@ using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace WebWithAutofacAndJwt.Infrastructure
+namespace WebWithAutofacAndJwt.Web.Infrastructure
 {
     public interface IJwtAuthManager
     {
@@ -54,7 +54,7 @@ namespace WebWithAutofacAndJwt.Infrastructure
 
     public class JwtAuthResult
     {
-        [JsonPropertyName("accessToken")]
+        //[JsonPropertyName("accessToken")]
         public string AccessToken { get; set; }
 
     }

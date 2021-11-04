@@ -1,10 +1,10 @@
 ﻿using Autofac;
 using Autofac.Extras.DynamicProxy;
-using WebWithAutofacAndJwt.Infrastructure;
-using WebWithAutofacAndJwt.Interceptor;
-using WebWithAutofacAndJwt.Service;
+using WebWithAutofacAndJwt.Web.Infrastructure;
+using WebWithAutofacAndJwt.Web.Interceptor;
+using WebWithAutofacAndJwt.Web.Service;
 
-namespace WebWithAutofacAndJwt
+namespace WebWithAutofacAndJwt.Web
 {
     public class AutofacModule : Module
     {
