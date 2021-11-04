@@ -8,3 +8,7 @@
 
 命令1生成迁移，并将迁移创建在`WebWithAutofacAndJwt.Migrations`项目重  
 命令2将修改应用到数据库
+
+代码仅作示例，很多细枝末节没去处理（比如应该新建一个继承`IdentityRole<long>`的Role类）。
+测试前先访问`InitRole`接口，在数据库中创建Role。  
+注册时根据用户名判断Role，用户名为admin则权限为admin，其他为basic。

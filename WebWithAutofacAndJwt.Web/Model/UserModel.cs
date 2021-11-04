@@ -3,7 +3,10 @@ using System.Text.Json.Serialization;
 
 namespace WebWithAutofacAndJwt.Web.Model
 {
-    public class User
+    /// <summary>
+    /// 输入的用户Model
+    /// </summary>
+    public class UserModel
     {
         [Required]
         [JsonPropertyName("username")]

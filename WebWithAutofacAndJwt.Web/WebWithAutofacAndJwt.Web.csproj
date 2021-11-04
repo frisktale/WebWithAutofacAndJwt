@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>3bc8debe-cbbf-4412-b566-c7cacb114ce6</UserSecretsId>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,7 +24,6 @@
   <ItemGroup>
     <ProjectReference Include="..\WebWithAutofacAndJwt.Entity\WebWithAutofacAndJwt.Entity.csproj" />
     <ProjectReference Include="..\WebWithAutofacAndJwt.Migrations\WebWithAutofacAndJwt.Migrations.csproj" />
-    <ProjectReference Include="..\WebWithAutofacAndJwt.Util\WebWithAutofacAndJwt.Util.csproj" />
   </ItemGroup>
 
 </Project>

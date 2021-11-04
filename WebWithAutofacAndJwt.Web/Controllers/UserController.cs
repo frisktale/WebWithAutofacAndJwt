@@ -4,28 +4,27 @@ using System.Security.Claims;
 using WebWithAutofacAndJwt.Web.Infrastructure;
 using WebWithAutofacAndJwt.Web.Model;
 using WebWithAutofacAndJwt.Web.Service;
-using static WebWithAutofacAndJwt.Web.Service.UserService;
 
 namespace WebWithAutofacAndJwt.Web.Controllers
 {
     [ApiController]
     [Authorize]
     [Route("[controller]/[action]")]
-    public class WeatherForecastController : ControllerBase
+    public class UserController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
         {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<UserController> _logger;
         private readonly IJwtAuthManager _jwtAuthManager;
 
-        public WeatherForecastController(
-            ILogger<WeatherForecastController> logger,
+        public UserController(
+            ILogger<UserController> logger,
             IUserService userService,
             IJwtAuthManager jwtAuthManager
-            )
+        )
         {
             _logger = logger;
             UserService = userService;
@@ -34,6 +33,10 @@ namespace WebWithAutofacAndJwt.Web.Controllers
 
         public IUserService UserService { get; }
 
+        /// <summary>
+        /// 测试管理员权限
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Authorize(Roles = UserRoles.Admin)]
         public IEnumerable<WeatherForecast> AdminGet()
@@ -47,6 +50,10 @@ namespace WebWithAutofacAndJwt.Web.Controllers
             .ToArray();
         }
 
+        /// <summary>
+        /// 测试普通用户权限
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Authorize(Roles = UserRoles.BasicUser)]
         public IEnumerable<WeatherForecast> BasicGet()
@@ -60,30 +67,66 @@ namespace WebWithAutofacAndJwt.Web.Controllers
             .ToArray();
         }
 
-
+        /// <summary>
+        /// 用户登录
+        /// </summary>
+        /// <param name="userName">用户名</param>
+        /// <param name="password">密码</param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Login([FromBody] User user)
+        public async Task<IActionResult> LoginAsync(string userName, string password)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            if (!UserService.IsValidUserCredentials(user.UserName, user.Password))
+            if (!await UserService.IsValidUserCredentialsAsync(userName, password))
             {
                 return Unauthorized();
             }
 
-            var role = UserService.GetUserRole(user.UserName);
+            var role = await UserService.GetUserRoleAsync(userName);
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name,user.UserName),
-                new Claim(ClaimTypes.Role, role)
+                new Claim(ClaimTypes.Name,userName),
+                new Claim(ClaimTypes.Role, string.Join(',',role))
             };
 
             var jwtResult = _jwtAuthManager.GenerateTokens(claims, DateTime.Now);
             return Ok(jwtResult);
+        }
+
+        /// <summary>
+        /// 注册用户
+        /// </summary>
+        /// <param name="user">用户model</param>
+        /// <returns>是否成功</returns>
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> RegisterAsync([FromBody] UserModel user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var role = await UserService.GetUserRoleOnRegisterAsync(user.UserName);
+            var res = await UserService.RegisterAsync(user.UserName, user.Password, role);
+            return Ok(res);
+        }
+
+        /// <summary>
+        /// 初始化用户权限（测试用）
+        /// </summary>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> InitRoleAsync()
+        {
+            var adminRes = await UserService.AddRoleAsync(UserRoles.Admin);
+            var basicRes = await UserService.AddRoleAsync(UserRoles.BasicUser);
+            return Ok(adminRes && basicRes);
         }
     }
 }

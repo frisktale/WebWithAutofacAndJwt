@@ -1,12 +1,11 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Castle.Core.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using System.Text;
 using WebWithAutofacAndJwt.Entity;
 using WebWithAutofacAndJwt.Web;
@@ -17,8 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.ConfigureAppConfiguration((hostContext, builder) =>
 {
-    // Add other providers for JSON, etc.
-
+    // 使用用户机密
     if (hostContext.HostingEnvironment.IsDevelopment())
     {
         builder.AddUserSecrets<Program>();
@@ -29,8 +27,8 @@ builder.Host.ConfigureAppConfiguration((hostContext, builder) =>
 builder.Host
     .UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .ConfigureContainer<ContainerBuilder>(t => t.RegisterModule(new AutofacModule()));
-// Add services to the container.
 
+//配置Json序列化
 builder.Services.AddControllers().AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
@@ -46,8 +44,11 @@ builder.Services.Configure<JwtTokenConfig>(jwtConfig);
 //配置id生成器
 builder.Services.RegisterIdGenService();
 
+//添加数据库
 builder.Services.AddDbContext<AppDbContext>(
         options => options.UseNpgsql("Name=ConnectionStrings:PgSqlConnection", x => x.MigrationsAssembly("WebWithAutofacAndJwt.Migrations")));
+//添加Identity
+builder.Services.AddIdentity<User, IdentityRole<long>>().AddEntityFrameworkStores<AppDbContext>();
 
 //添加jwt
 builder.Services.AddAuthentication(x =>
@@ -76,6 +77,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "WebWithAutofac", Version = "v1" });
 
+    //启用JWT认证
     var securityScheme = new OpenApiSecurityScheme
     {
         Name = "JWT 鉴权",
@@ -95,6 +97,13 @@ builder.Services.AddSwaggerGen(c =>
     {
         {securityScheme, Array.Empty<string>()}
     });
+
+    #region swagger扫描xml
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var path = builder.Environment.ContentRootPath;
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath, true);
+    #endregion
 });
 
 //添加跨域

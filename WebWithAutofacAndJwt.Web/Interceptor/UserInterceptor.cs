@@ -11,7 +11,10 @@ public class UserInterceptor : IInterceptor
         _logger = logger;
     }
 
-
+    /// <summary>
+    /// AOP示例
+    /// </summary>
+    /// <param name="invocation">待执行的方法</param>
     public void Intercept(IInvocation invocation)
     {
 

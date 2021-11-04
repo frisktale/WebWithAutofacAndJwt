@@ -2,10 +2,17 @@
 
 namespace WebWithAutofacAndJwt.Web.Extensions
 {
-
+    /// <summary>
+    /// 注册自定义服务
+    /// </summary>
     public static class RegisterService
     {
 
+        /// <summary>
+        /// 注册id生成器
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         public static IServiceCollection RegisterIdGenService(this IServiceCollection services)
         {
             // 创建 IdGeneratorOptions 对象，请在构造函数中输入 WorkerId：
