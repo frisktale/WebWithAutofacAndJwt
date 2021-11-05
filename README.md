@@ -11,4 +11,13 @@
 
 代码仅作示例，很多细枝末节没去处理（比如应该新建一个继承`IdentityRole<long>`的Role类）。
 测试前先访问`InitRole`接口，在数据库中创建Role。  
-注册时根据用户名判断Role，用户名为admin则权限为admin，其他为basic。
+注册时根据用户名判断Role，用户名为admin则权限为admin，其他为basic。  
+数据库使用的是PostgreSQL  
+数据库字符串在用户机密中配置如下
+```json
+{
+  "ConnectionStrings": {
+    "PgSqlConnection": ""
+  }
+}
+```
