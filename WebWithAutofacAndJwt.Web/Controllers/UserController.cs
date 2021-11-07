@@ -1,12 +1,15 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using WebWithAutofacAndJwt.Web.Infrastructure;
 using WebWithAutofacAndJwt.Web.Model;
 using WebWithAutofacAndJwt.Web.Service;
 
 namespace WebWithAutofacAndJwt.Web.Controllers
 {
+    /// <summary>
+    /// 用户控制器
+    /// </summary>
     [ApiController]
     [Authorize]
     [Route("[controller]/[action]")]
@@ -19,19 +22,14 @@ namespace WebWithAutofacAndJwt.Web.Controllers
 
         private readonly ILogger<UserController> _logger;
         private readonly IJwtAuthManager _jwtAuthManager;
+        private readonly IUserService _userService;
 
         public UserController(
             ILogger<UserController> logger,
             IUserService userService,
             IJwtAuthManager jwtAuthManager
-        )
-        {
-            _logger = logger;
-            UserService = userService;
-            _jwtAuthManager = jwtAuthManager;
-        }
+        ) => (_logger, _userService, _jwtAuthManager) = (logger, userService, jwtAuthManager);
 
-        public IUserService UserService { get; }
 
         /// <summary>
         /// 测试管理员权限
@@ -82,12 +80,12 @@ namespace WebWithAutofacAndJwt.Web.Controllers
                 return BadRequest();
             }
 
-            if (!await UserService.IsValidUserCredentialsAsync(userName, password))
+            if (!await _userService.IsValidUserCredentialsAsync(userName, password))
             {
                 return Unauthorized();
             }
 
-            var role = await UserService.GetUserRoleAsync(userName);
+            var role = await _userService.GetUserRoleAsync(userName);
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name,userName),
@@ -111,8 +109,8 @@ namespace WebWithAutofacAndJwt.Web.Controllers
             {
                 return BadRequest();
             }
-            var role = await UserService.GetUserRoleOnRegisterAsync(user.UserName);
-            var res = await UserService.RegisterAsync(user.UserName, user.Password, role);
+            var role = await _userService.GetUserRoleOnRegisterAsync(user.UserName);
+            var res = await _userService.RegisterAsync(user.UserName, user.Password, role);
             return Ok(res);
         }
 
@@ -124,8 +122,8 @@ namespace WebWithAutofacAndJwt.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> InitRoleAsync()
         {
-            var adminRes = await UserService.AddRoleAsync(UserRoles.Admin);
-            var basicRes = await UserService.AddRoleAsync(UserRoles.BasicUser);
+            var adminRes = await _userService.AddRoleAsync(UserRoles.Admin);
+            var basicRes = await _userService.AddRoleAsync(UserRoles.BasicUser);
             return Ok(adminRes && basicRes);
         }
     }
