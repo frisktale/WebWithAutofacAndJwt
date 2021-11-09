@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace WebWithAutofacAndJwt.Entity
+namespace WebWithAutofacAndJwt.Entity;
+public class User : IdentityUser<long>
 {
-    public class User : IdentityUser<long>
-    {
 
-    }
 }
