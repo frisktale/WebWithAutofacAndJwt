@@ -6,84 +6,82 @@ using WebWithAutofacAndJwt.Model;
 using WebWithAutofacAndJwt.Service;
 using static WebWithAutofacAndJwt.Service.UserService;
 
-namespace WebWithAutofacAndJwt.Controllers
+namespace WebWithAutofacAndJwt.Controllers;
+[ApiController]
+[Authorize]
+[Route("[controller]/[action]")]
+public class WeatherForecastController : ControllerBase
 {
-    [ApiController]
-    [Authorize]
-    [Route("[controller]/[action]")]
-    public class WeatherForecastController : ControllerBase
+    private static readonly string[] Summaries = new[]
     {
-        private static readonly string[] Summaries = new[]
-        {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
-        private readonly ILogger<WeatherForecastController> _logger;
-        private readonly IJwtAuthManager _jwtAuthManager;
+    private readonly ILogger<WeatherForecastController> _logger;
+    private readonly IJwtAuthManager _jwtAuthManager;
 
-        public WeatherForecastController(
-            ILogger<WeatherForecastController> logger,
-            IUserService userService,
-            IJwtAuthManager jwtAuthManager
-            )
+    public WeatherForecastController(
+        ILogger<WeatherForecastController> logger,
+        IUserService userService,
+        IJwtAuthManager jwtAuthManager
+        )
+    {
+        _logger = logger;
+        UserService = userService;
+        _jwtAuthManager = jwtAuthManager;
+    }
+
+    public IUserService UserService { get; }
+
+    [HttpGet]
+    [Authorize(Roles = UserRoles.Admin)]
+    public IEnumerable<WeatherForecast> AdminGet()
+    {
+        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
-            _logger = logger;
-            UserService = userService;
-            _jwtAuthManager = jwtAuthManager;
+            Date = DateTime.Now.AddDays(index),
+            TemperatureC = Random.Shared.Next(-20, 55),
+            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+        })
+        .ToArray();
+    }
+
+    [HttpGet]
+    [Authorize(Roles = UserRoles.BasicUser)]
+    public IEnumerable<WeatherForecast> BasicGet()
+    {
+        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        {
+            Date = DateTime.Now.AddDays(index),
+            TemperatureC = Random.Shared.Next(-20, 55),
+            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+        })
+        .ToArray();
+    }
+
+
+    [AllowAnonymous]
+    [HttpPost]
+    public IActionResult Login([FromBody] User user)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
         }
 
-        public IUserService UserService { get; }
-
-        [HttpGet]
-        [Authorize(Roles = UserRoles.Admin)]
-        public IEnumerable<WeatherForecast> AdminGet()
+        if (!UserService.IsValidUserCredentials(user.UserName, user.Password))
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            return Unauthorized();
         }
 
-        [HttpGet]
-        [Authorize(Roles = UserRoles.BasicUser)]
-        public IEnumerable<WeatherForecast> BasicGet()
+        var role = UserService.GetUserRole(user.UserName);
+        var claims = new[]
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
-        }
-
-
-        [AllowAnonymous]
-        [HttpPost]
-        public IActionResult Login([FromBody] User user)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-
-            if (!UserService.IsValidUserCredentials(user.UserName, user.Password))
-            {
-                return Unauthorized();
-            }
-
-            var role = UserService.GetUserRole(user.UserName);
-            var claims = new[]
-            {
                 new Claim(ClaimTypes.Name,user.UserName),
                 new Claim(ClaimTypes.Role, role)
             };
 
-            var jwtResult = _jwtAuthManager.GenerateTokens(claims, DateTime.Now);
-            return Ok(jwtResult);
-        }
+        var jwtResult = _jwtAuthManager.GenerateTokens(claims, DateTime.Now);
+        return Ok(jwtResult);
     }
 }

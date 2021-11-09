@@ -1,9 +1,7 @@
-﻿namespace WebWithAutofacAndJwt.Service
+﻿namespace WebWithAutofacAndJwt.Service;
+public interface IUserService
 {
-    public interface IUserService
-    {
-        bool IsAnExistingUser(string userName);
-        bool IsValidUserCredentials(string userName, string password);
-        string GetUserRole(string userName);
-    }
+    bool IsAnExistingUser(string userName);
+    bool IsValidUserCredentials(string userName, string password);
+    string GetUserRole(string userName);
 }
