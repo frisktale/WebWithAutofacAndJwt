@@ -28,8 +28,9 @@ builder.Host
     .UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .ConfigureContainer<ContainerBuilder>(t => t.RegisterModule(new AutofacModule()));
 
+var service = builder.Services;
 //配置Json序列化
-builder.Services.AddControllers().AddJsonOptions(options =>
+service.AddControllers().AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
     }
@@ -38,25 +39,27 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 //获取配置
 var jwtConfig = builder.Configuration.GetSection("jwtTokenConfig");
 var jwtTokenConfig = jwtConfig.Get<JwtTokenConfig>();
+
+
 //绑定配置
-builder.Services.Configure<JwtTokenConfig>(jwtConfig);
+service.Configure<JwtTokenConfig>(jwtConfig);
 
 //配置id生成器
-builder.Services.RegisterIdGenService();
+service.RegisterIdGenService();
 
 //添加数据库
-builder.Services.AddDbContext<AppDbContext>(
+service.AddDbContext<AppDbContext>(
         options => 
         options.UseNpgsql("Name=ConnectionStrings:PgSqlConnection", x => x.MigrationsAssembly("WebWithAutofacAndJwt.Migrations"))
     );
 //添加Identity
-builder.Services.AddIdentity<User, IdentityRole<long>>()
+service.AddIdentity<User, IdentityRole<long>>()
     .AddEntityFrameworkStores<AppDbContext>()
     //添加用于生成重置密码的令牌、更改电子邮件和更改电话号码操作以及双因素身份验证令牌生成的默认令牌提供程序。（这东西有啥用我也不清楚）
     .AddDefaultTokenProviders();
 
 //添加jwt
-builder.Services.AddAuthentication(x =>
+service.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -78,7 +81,7 @@ builder.Services.AddAuthentication(x =>
 });
 
 
-builder.Services.AddSwaggerGen(c =>
+service.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "WebWithAutofac", Version = "v1" });
 
@@ -112,7 +115,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 //添加跨域
-builder.Services.AddCors(options =>
+service.AddCors(options =>
 {
     options.AddDefaultPolicy(
         builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
