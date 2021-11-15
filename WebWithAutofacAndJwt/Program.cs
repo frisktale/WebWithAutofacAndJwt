@@ -18,16 +18,18 @@ builder.Host
     .ConfigureContainer<ContainerBuilder>(t => t.RegisterModule(new AutofacModule()));
 // Add services to the container.
 
-builder.Services.AddControllers(); 
+var service = builder.Services;
+
+service.AddControllers();
 
 //ªÒ»°≈‰÷√
 var jwtConfig = builder.Configuration.GetSection("jwtTokenConfig");
 var jwtTokenConfig = jwtConfig.Get<JwtTokenConfig>();
 //∞Û∂®≈‰÷√
-builder.Services.Configure<JwtTokenConfig>(jwtConfig);
+service.Configure<JwtTokenConfig>(jwtConfig);
 
 //ÃÌº”jwt
-builder.Services.AddAuthentication(x =>
+service.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -49,7 +51,7 @@ builder.Services.AddAuthentication(x =>
 });
 
 
-builder.Services.AddSwaggerGen(c =>
+service.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "WebWithAutofac", Version = "v1" });
 
@@ -75,7 +77,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 //ÃÌº”øÁ”Ú
-builder.Services.AddCors(options =>
+service.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
         builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
