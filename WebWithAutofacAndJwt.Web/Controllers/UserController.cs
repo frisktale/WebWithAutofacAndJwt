@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebWithAutofacAndJwt.Web.Infrastructure;
 using WebWithAutofacAndJwt.Web.Model;
 using WebWithAutofacAndJwt.Web.Service;
+using Microsoft.AspNetCore.Http;
 
 namespace WebWithAutofacAndJwt.Web.Controllers;
 /// <summary>
@@ -72,13 +73,11 @@ public class UserController : ControllerBase
     /// <returns></returns>
     [AllowAnonymous]
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesDefaultResponseType]
     public async Task<IActionResult> LoginAsync(string userName, string password)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest();
-        }
-
         if (!await _userService.IsValidUserCredentialsAsync(userName, password))
         {
             return Unauthorized();
@@ -102,12 +101,11 @@ public class UserController : ControllerBase
     /// <returns>ÊÇ·ñ³É¹¦</returns>
     [AllowAnonymous]
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesDefaultResponseType]
     public async Task<IActionResult> RegisterAsync([FromBody] UserModel user)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest();
-        }
         var role = await _userService.GetUserRoleOnRegisterAsync(user.UserName);
         var res = await _userService.RegisterAsync(user.UserName, user.Password, role);
         return Ok(res);
