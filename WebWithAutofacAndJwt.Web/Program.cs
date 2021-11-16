@@ -48,7 +48,7 @@ service.Configure<JwtTokenConfig>(jwtConfig);
 service.RegisterIdGenService();
 
 //Ìí¼ÓÊý¾Ý¿â
-service.AddDbContext<AppDbContext>(
+service.AddDbContextPool<AppDbContext>(
         options => 
         options.UseNpgsql("Name=ConnectionStrings:PgSqlConnection", x => x.MigrationsAssembly("WebWithAutofacAndJwt.Migrations"))
     );
