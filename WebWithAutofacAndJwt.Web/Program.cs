@@ -1,4 +1,4 @@
-using Autofac;
+ï»¿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -16,49 +16,48 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.ConfigureAppConfiguration((hostContext, builder) =>
 {
-    // Ê¹ÓÃÓÃ»§»úÃÜ
+    // ä½¿ç”¨ç”¨æˆ·æœºå¯†
     if (hostContext.HostingEnvironment.IsDevelopment())
     {
         builder.AddUserSecrets<Program>();
     }
 });
 
-//ÅäÖÃAutofacÎªÄ¬ÈÏIOCÈİÆ÷
+//é…ç½®Autofacä¸ºé»˜è®¤IOCå®¹å™¨
 builder.Host
     .UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .ConfigureContainer<ContainerBuilder>(t => t.RegisterModule(new AutofacModule()));
 
 var service = builder.Services;
-//ÅäÖÃJsonĞòÁĞ»¯
+//é…ç½®Jsonåºåˆ—åŒ–
 service.AddControllers().AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
     }
 );
 
-//»ñÈ¡ÅäÖÃ
+//è·å–é…ç½®
 var jwtConfig = builder.Configuration.GetSection("jwtTokenConfig");
 var jwtTokenConfig = jwtConfig.Get<JwtTokenConfig>();
 
 
-//°ó¶¨ÅäÖÃ
+//ç»‘å®šé…ç½®
 service.Configure<JwtTokenConfig>(jwtConfig);
 
-//ÅäÖÃidÉú³ÉÆ÷
+//é…ç½®idç”Ÿæˆå™¨
 service.RegisterIdGenService();
 
-//Ìí¼ÓÊı¾İ¿â
+//æ·»åŠ æ•°æ®åº“
 service.AddDbContextPool<AppDbContext>(
-        options => 
+        options =>
         options.UseNpgsql("Name=ConnectionStrings:PgSqlConnection", x => x.MigrationsAssembly("WebWithAutofacAndJwt.Migrations"))
     );
-//Ìí¼ÓIdentity
+//æ·»åŠ Identity
 service.AddIdentity<User, IdentityRole<long>>()
     .AddEntityFrameworkStores<AppDbContext>()
-    //Ìí¼ÓÓÃÓÚÉú³ÉÖØÖÃÃÜÂëµÄÁîÅÆ¡¢¸ü¸Äµç×ÓÓÊ¼şºÍ¸ü¸Äµç»°ºÅÂë²Ù×÷ÒÔ¼°Ë«ÒòËØÉí·İÑéÖ¤ÁîÅÆÉú³ÉµÄÄ¬ÈÏÁîÅÆÌá¹©³ÌĞò¡££¨Õâ¶«Î÷ÓĞÉ¶ÓÃÎÒÒ²²»Çå³ş£©
     .AddDefaultTokenProviders();
 
-//Ìí¼Ójwt
+//æ·»åŠ jwt
 service.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -85,11 +84,11 @@ service.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "WebWithAutofac", Version = "v1" });
 
-    //ÆôÓÃJWTÈÏÖ¤
+    //å¯ç”¨JWTè®¤è¯
     var securityScheme = new OpenApiSecurityScheme
     {
-        Name = "JWT ¼øÈ¨",
-        Description = "ÊäÈëÄãµÄJWT Token£¨²»ĞèÒª¼Ó ¡®Bearer¡¯£©",
+        Name = "JWT é‰´æƒ",
+        Description = "è¾“å…¥ä½ çš„JWT Tokenï¼ˆä¸éœ€è¦åŠ  â€˜Bearerâ€™ï¼‰",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
         Scheme = "bearer", // must be lower case
@@ -106,7 +105,7 @@ service.AddSwaggerGen(c =>
         {securityScheme, Array.Empty<string>()}
     });
 
-    #region swaggerÉ¨Ãèxml
+    #region swaggeræ‰«æxml
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var path = builder.Environment.ContentRootPath;
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -114,7 +113,7 @@ service.AddSwaggerGen(c =>
     #endregion
 });
 
-//Ìí¼Ó¿çÓò
+//æ·»åŠ è·¨åŸŸ
 service.AddCors(options =>
 {
     options.AddDefaultPolicy(
@@ -133,7 +132,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors();
 app.UseHttpsRedirection();
 
-//´Ë´¦×¢ÒâË³Ğò²»ÄÜ·´£¬¶øÇÒ±ØĞëÔÚmapcontrollerµÄÉÏÃæ¡££¨Àí½âÖĞ¼ä¼şµÄÔ­Àí£©
+//æ­¤å¤„æ³¨æ„é¡ºåºä¸èƒ½åï¼Œè€Œä¸”å¿…é¡»åœ¨mapcontrollerçš„ä¸Šé¢ã€‚ï¼ˆç†è§£ä¸­é—´ä»¶çš„åŸç†ï¼‰
 app.UseAuthentication();
 app.UseAuthorization();
 
