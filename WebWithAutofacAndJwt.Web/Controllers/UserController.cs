@@ -1,4 +1,4 @@
-using System.Security.Claims;
+ï»¿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebWithAutofacAndJwt.Web.Infrastructure;
@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace WebWithAutofacAndJwt.Web.Controllers;
 /// <summary>
-/// ÓÃ»§¿ØÖÆÆ÷
+/// ç”¨æˆ·æ§åˆ¶å™¨
 /// </summary>
 [ApiController]
 [Authorize]
@@ -32,7 +32,7 @@ public class UserController : ControllerBase
 
 
     /// <summary>
-    /// ²âÊÔ¹ÜÀíÔ±È¨ÏŞ
+    /// æµ‹è¯•ç®¡ç†å‘˜æƒé™
     /// </summary>
     /// <returns></returns>
     [HttpGet]
@@ -49,7 +49,7 @@ public class UserController : ControllerBase
     }
 
     /// <summary>
-    /// ²âÊÔÆÕÍ¨ÓÃ»§È¨ÏŞ
+    /// æµ‹è¯•æ™®é€šç”¨æˆ·æƒé™
     /// </summary>
     /// <returns></returns>
     [HttpGet]
@@ -66,10 +66,10 @@ public class UserController : ControllerBase
     }
 
     /// <summary>
-    /// ÓÃ»§µÇÂ¼
+    /// ç”¨æˆ·ç™»å½•
     /// </summary>
-    /// <param name="userName">ÓÃ»§Ãû</param>
-    /// <param name="password">ÃÜÂë</param>
+    /// <param name="userName">ç”¨æˆ·å</param>
+    /// <param name="password">å¯†ç </param>
     /// <returns></returns>
     [AllowAnonymous]
     [HttpPost]
@@ -95,10 +95,10 @@ public class UserController : ControllerBase
     }
 
     /// <summary>
-    /// ×¢²áÓÃ»§
+    /// æ³¨å†Œç”¨æˆ·
     /// </summary>
-    /// <param name="user">ÓÃ»§model</param>
-    /// <returns>ÊÇ·ñ³É¹¦</returns>
+    /// <param name="user">ç”¨æˆ·model</param>
+    /// <returns>æ˜¯å¦æˆåŠŸ</returns>
     [AllowAnonymous]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -112,7 +112,7 @@ public class UserController : ControllerBase
     }
 
     /// <summary>
-    /// ³õÊ¼»¯ÓÃ»§È¨ÏŞ£¨²âÊÔÓÃ£©
+    /// åˆå§‹åŒ–ç”¨æˆ·æƒé™ï¼ˆæµ‹è¯•ç”¨ï¼‰
     /// </summary>
     /// <returns></returns>
     [AllowAnonymous]
