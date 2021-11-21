@@ -1,4 +1,4 @@
-using Autofac;
+ï»¿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Castle.Core.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -12,7 +12,7 @@ using WebWithAutofacAndJwt.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//ÅäÖÃAutofacÎªÄ¬ÈÏIOCÈİÆ÷
+//é…ç½®Autofacä¸ºé»˜è®¤IOCå®¹å™¨
 builder.Host
     .UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .ConfigureContainer<ContainerBuilder>(t => t.RegisterModule(new AutofacModule()));
@@ -22,13 +22,13 @@ var service = builder.Services;
 
 service.AddControllers();
 
-//»ñÈ¡ÅäÖÃ
+//è·å–é…ç½®
 var jwtConfig = builder.Configuration.GetSection("jwtTokenConfig");
 var jwtTokenConfig = jwtConfig.Get<JwtTokenConfig>();
-//°ó¶¨ÅäÖÃ
+//ç»‘å®šé…ç½®
 service.Configure<JwtTokenConfig>(jwtConfig);
 
-//Ìí¼Ójwt
+//æ·»åŠ jwt
 service.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -57,8 +57,8 @@ service.AddSwaggerGen(c =>
 
     var securityScheme = new OpenApiSecurityScheme
     {
-        Name = "JWT ¼øÈ¨",
-        Description = "ÊäÈëÄãµÄJWT Token£¨²»ĞèÒª¼Ó ¡®Bearer¡¯£©",
+        Name = "JWT é‰´æƒ",
+        Description = "è¾“å…¥ä½ çš„JWT Tokenï¼ˆä¸éœ€è¦åŠ  â€˜Bearerâ€™ï¼‰",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
         Scheme = "bearer", // must be lower case
@@ -76,7 +76,7 @@ service.AddSwaggerGen(c =>
     });
 });
 
-//Ìí¼Ó¿çÓò
+//æ·»åŠ è·¨åŸŸ
 service.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
@@ -96,7 +96,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 
-//´Ë´¦×¢ÒâË³Ğò²»ÄÜ·´£¬¶øÇÒ±ØĞëÔÚmapcontrollerµÄÉÏÃæ¡££¨Àí½âÖĞ¼ä¼şµÄÔ­Àí£©
+//æ­¤å¤„æ³¨æ„é¡ºåºä¸èƒ½åï¼Œè€Œä¸”å¿…é¡»åœ¨mapcontrollerçš„ä¸Šé¢ã€‚ï¼ˆç†è§£ä¸­é—´ä»¶çš„åŸç†ï¼‰
 app.UseAuthentication();
 app.UseAuthorization();
 
