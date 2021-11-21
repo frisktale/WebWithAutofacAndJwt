@@ -1,4 +1,4 @@
-﻿namespace WebWithAutofacAndJwt.Web;
+namespace WebWithAutofacAndJwt.Web;
 public class WeatherForecast
 {
     public DateTime Date { get; set; }
